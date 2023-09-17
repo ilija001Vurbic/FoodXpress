@@ -1,4 +1,11 @@
 {
-  "name": "FoodXpress",
-  "displayName": "FoodXpress"
+  "expo": {
+    "name": "FoodXpress",
+    "slug": "FoodXpress",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "FoodXpress"
 }
