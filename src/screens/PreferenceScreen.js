@@ -1,145 +1,180 @@
-import React, { Component } from 'react'
-import { Text, StyleSheet, View,ScrollView,Image,Platform } from 'react-native'
-import {colors} from '../global/styles'
-import {
-    Icon,
-    CheckBox
-  } from 'react-native-elements';
-
-  import { menuDetailedData } from '../global/Data';
+import React, { Component } from 'react';
+import { Text, StyleSheet, View, ScrollView, Image, Platform, Alert } from 'react-native';
+import { colors } from '../global/styles';
+import { Icon, CheckBox } from 'react-native-elements';
+import { menuDetailedData } from '../global/Data';
+import { auth,database } from '../../firebase'; // Import Firebase configuration
+import { ref, push, set } from 'firebase/database';
 
 export default class PreferenceScreen extends Component {
+  constructor(props) {
+    super(props);
 
-        constructor(props){
-          super(props);
+    this.state = {
+      preference: menuDetailedData[this.props.route.params.index].preferenceData,
+      required: menuDetailedData[this.props.route.params.index].required,
+      minimum_quantity: menuDetailedData[this.props.route.params.index].minimum_quatity,
+      selectedItems: [],
+      quantity: 1, // Initialize quantity
+    };
+  }
 
-          this.state ={
-            preference:menuDetailedData[this.props.route.params.index].preferenceData,
-            required:menuDetailedData[this.props.route.params.index].required,
-            minimum_quantity :menuDetailedData[this.props.route.params.index].minimum_quatity,
-          }
-        }
+  handleOrder = async () => {
+    const currentUser = auth.currentUser; // Get the current logged-in user
 
-    render() {
-        const index  = this.props.route.params.index
-        const {meal,details,price} = menuDetailedData[index];
-        
-        
-        return (
-            <View style ={styles.container}>
-                <ScrollView>
-                    <View style ={styles.header}>
-                        <Image
-                            style ={styles.backgroundImage}
-                            source ={{uri:"https://bukasapics.s3.us-east-2.amazonaws.com/macdo.png"}}
-                        />
-                     </View>
-                     <View style ={styles.bar}>
-                        <Text style ={styles.title}>Choose a preference</Text>
-                     </View>
-                     <View style ={styles.view12}>
-                        <Icon 
-                            name ="arrow-left"
-                            type = "material-community"
-                            color ={colors.cardbackground}
-                            size ={25}
-                            onPress ={()=>{this.props.navigation.goBack()}}
-                        />
-                     </View>
-                     <View style ={styles.view1}>
-                        <Text style ={styles.text1}>{meal}</Text>
-                        <Text style ={styles.text2}>{details}</Text>
-                     </View>
-                     <View style ={styles.view2}>
-                        <Text style ={styles.text3}>Choose a meal type</Text>
-                        <View style = {styles.view3}>
-                           <Text style ={styles.text4}>REQUIRED</Text>
-                        </View>
-                     </View>
-                     <View style ={styles.view4}>
-                        <View style ={styles.view5}>
-                            <View style ={styles.view6}>
-                               <CheckBox 
-                                  center
-                                  checkedIcon = "dot-circle-o"
-                                  uncheckedIcon = "circle-o"
-                                  checked ={true}
-                                  checkedColor ={colors.buttons}
+    if (currentUser) {
+      const userId = currentUser.uid; // Retrieve user ID
+      const ordersRef = ref(database, `orders/${userId}`); // Reference to the user's orders path
 
-                                />
-                                <Text style ={styles.text5}>- - - - -</Text>
-                            </View>
-                            <Text style ={styles.text6}>R{price.toFixed(2)}</Text>
-                        </View>
-                     </View>
-                     <View>
-                       {this.state.preference.map(item=><View key ={item.id}>
-                          <View style ={styles.view7}>
-                             <Text style ={styles.text8}>{menuDetailedData[index].preferenceTitle[this.state.preference.indexOf(item)]}</Text>
-                             {this.state.required[this.state.preference.indexOf(item)] &&
-                              <View style ={styles.view9}>
-                                  <Text style ={styles.text7}>{this.state.minimum_quantity[this.state.preference.indexOf(item)]} REQUIRED</Text>
-                              </View>
+      // Generate a new order ID
+      const newOrderRef = push(ordersRef); // This creates a new child node with a unique key
+      const orderId = newOrderRef.key;
 
-                             }
-                          </View>
-                          <View style ={styles.view10}>
-                              {item.map(items => 
-                                <View style ={styles.view4}>
-                                      <View style ={styles.view19}>
-                                          <View style ={styles.view6}>
-                                            <CheckBox 
-                                                center
-                                                checkedIcon = "check-square-o"
-                                                uncheckedIcon = "square-o"
-                                                checked ={false}
-                                                checkedColor ={colors.buttons}
+      const { meal, price } = menuDetailedData[this.props.route.params.index];
+      const orderData = {
+        orderId,
+        meal,
+        selectedItems: this.state.selectedItems,
+        quantity: this.state.quantity,
+        total: price * this.state.quantity,
+        timestamp: new Date().toISOString(),
+      };
 
-                                              />
-                                              <Text style ={{color:colors.grey2,marginLeft:-10}}>{items.name}</Text>
-                                          </View>
-                                          <Text style ={styles.text6}>R{items.price.toFixed(2)}</Text>
-                                      </View>
-                                  </View>
-                     )}
-                          </View>
-                       </View>)
-
-                       }
-                     </View>
-                </ScrollView>
-                <View style ={styles.view13}>
-                    <Text style ={styles.text11}>Quantity</Text>
-                </View>
-                <View style ={styles.view14}>
-                   <View style ={styles.view15}>
-                      <Icon 
-                          name ="remove"
-                          type = "material"
-                          color ={colors.black}
-                          size ={25}
-                          onPress ={()=>{}}
-                            />
-                   </View>  
-                   <Text style ={styles.text9}>1</Text>  
-                   <View style ={styles.view16}>
-                      <Icon 
-                            name ="add"
-                            type = "material"
-                            color ={colors.black}
-                            size ={25}
-                            onPress ={()=>{}}
-                              />
-                   </View> 
-                </View>
-                <View style ={styles.view17}>
-                    <View style ={styles.view18}>
-                        <Text style ={styles.text10}>Add 1 to Cart R78.21</Text>
-                    </View>
-                </View>
-            </View>
-        )
+      try {
+        await set(newOrderRef, orderData); // Store the order data under the new order ID
+        Alert.alert('Success', 'Your order has been placed successfully!');
+      } catch (error) {
+        console.error('Error storing order:', error);
+        Alert.alert('Error', 'Failed to place order. Please try again.');
+      }
+    } else {
+      Alert.alert('Error', 'You must be logged in to place an order.');
     }
+  };
+
+  render() {
+    const index = this.props.route.params.index;
+    const { meal, details, price } = menuDetailedData[index];
+
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.header}>
+            <Image
+              style={styles.backgroundImage}
+              source={{ uri: "https://bukasapics.s3.us-east-2.amazonaws.com/macdo.png" }}
+            />
+          </View>
+          <View style={styles.bar}>
+            <Text style={styles.title}>Choose a preference</Text>
+          </View>
+          <View style={styles.view12}>
+            <Icon
+              name="arrow-left"
+              type="material-community"
+              color={colors.cardbackground}
+              size={25}
+              onPress={() => { this.props.navigation.goBack() }}
+            />
+          </View>
+          <View style={styles.view1}>
+            <Text style={styles.text1}>{meal}</Text>
+            <Text style={styles.text2}>{details}</Text>
+          </View>
+          <View style={styles.view2}>
+            <Text style={styles.text3}>Choose a meal type</Text>
+            <View style={styles.view3}>
+              <Text style={styles.text4}>REQUIRED</Text>
+            </View>
+          </View>
+          <View style={styles.view4}>
+            <View style={styles.view5}>
+              <View style={styles.view6}>
+                <CheckBox
+                  center
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  checked={true}
+                  checkedColor={colors.buttons}
+                />
+                <Text style={styles.text5}>- - - - -</Text>
+              </View>
+              <Text style={styles.text6}>R{price.toFixed(2)}</Text>
+            </View>
+          </View>
+          {/* Render preferences */}
+          <View>
+            {this.state.preference.map(item => (
+              <View key={item.id}>
+                <View style={styles.view7}>
+                  <Text style={styles.text8}>{menuDetailedData[index].preferenceTitle[this.state.preference.indexOf(item)]}</Text>
+                  {this.state.required[this.state.preference.indexOf(item)] &&
+                    <View style={styles.view9}>
+                      <Text style={styles.text7}>{this.state.minimum_quantity[this.state.preference.indexOf(item)]} REQUIRED</Text>
+                    </View>
+                  }
+                </View>
+                <View style={styles.view10}>
+                  {item.map(items =>
+                    <View style={styles.view4} key={items.id}>
+                      <View style={styles.view19}>
+                        <View style={styles.view6}>
+                          <CheckBox
+                            center
+                            checkedIcon="check-square-o"
+                            uncheckedIcon="square-o"
+                            checked={this.state.selectedItems.includes(items.name)}
+                            checkedColor={colors.buttons}
+                            onPress={() => {
+                              const selectedItems = this.state.selectedItems.includes(items.name)
+                                ? this.state.selectedItems.filter(name => name !== items.name)
+                                : [...this.state.selectedItems, items.name];
+                              this.setState({ selectedItems });
+                            }}
+                          />
+                          <Text style={{ color: colors.grey2, marginLeft: -10 }}>{items.name}</Text>
+                        </View>
+                        <Text style={styles.text6}>R{items.price.toFixed(2)}</Text>
+                      </View>
+                    </View>
+                  )}
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+        <View style={styles.view13}>
+          <Text style={styles.text11}>Quantity</Text>
+        </View>
+        <View style={styles.view14}>
+          <View style={styles.view15}>
+            <Icon
+              name="remove"
+              type="material"
+              color={colors.black}
+              size={25}
+              onPress={() => this.setState({ quantity: Math.max(1, this.state.quantity - 1) })}
+            />
+          </View>
+          <Text style={styles.text9}>{this.state.quantity}</Text>
+          <View style={styles.view16}>
+            <Icon
+              name="add"
+              type="material"
+              color={colors.black}
+              size={25}
+              onPress={() => this.setState({ quantity: this.state.quantity + 1 })}
+            />
+          </View>
+        </View>
+        <View style={styles.view17}>
+          <View style={styles.view18}>
+            <Text style={styles.text10} onPress={this.handleOrder}>Add {this.state.quantity} to Cart R{(price * this.state.quantity).toFixed(2)}</Text>
+          </View>
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

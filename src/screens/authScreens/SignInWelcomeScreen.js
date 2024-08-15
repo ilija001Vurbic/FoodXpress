@@ -50,6 +50,9 @@ export default function SignInWelcomeScreen({navigation}){
                     title="Kreirajte račun"
                     buttonStyle={styles.createButton}
                     titleStyle={styles.createButtonTitle}
+                    onPress={()=>{
+                        navigation.navigate("SignUpScreen")
+                    }}
                 />
             </View>
             </View>

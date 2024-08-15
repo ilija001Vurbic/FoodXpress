@@ -8,7 +8,7 @@ import HomeScreen from "../screens/HomeScreen";
 import MyOrdersScreen from "../screens/MyOrdersScreen";
 import MyAccountScreen from "../screens/MyAccountScreen"
 import { ClientStack } from './clientStack';
-
+import EditOrderScreen from '../screens/EditOrderScreen';
 
 const ClientTabs = createBottomTabNavigator();
 
@@ -83,7 +83,11 @@ export default function RootClientTabs(){
                 }
 
             />
-
+        <ClientTabs.Screen
+            name="EditOrderScreen"
+            component={EditOrderScreen}
+            options={{ title: 'Edit Order' }} // Name should match the one used in the navigate function
+        />
 
 
         <ClientTabs.Screen 
