@@ -3,9 +3,24 @@
     "name": "FoodXpress",
     "slug": "FoodXpress",
     "version": "1.0.0",
+    "jsEngine": "jsc",
+    "platforms": [
+      "android"
+    ],
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fc442635-8103-413e-b647-7f1752228131"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/fc442635-8103-413e-b647-7f1752228131"
+    },
+    "android": {},
+    "ios": {}
   },
   "name": "FoodXpress"
 }

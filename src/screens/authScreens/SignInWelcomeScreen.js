@@ -5,6 +5,7 @@ import { Button, Icon, SocialIcon } from 'react-native-elements';
 import * as Animatable from "react-native-animatable";
 import Swiper from 'react-native-swiper';
 
+
 export default function SignInWelcomeScreen({navigation}){
     return(
         <View style={{flex:1}}>
