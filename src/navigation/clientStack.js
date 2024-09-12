@@ -6,6 +6,10 @@ import SearchResultScreen from '../screens/SearchResultScreen';
 import RestaurantHomeScreen from '../screens/RestaurantHomeScreen';
 import MenuProductScreen from '../screens/MenuProductScreen';
 import PreferenceScreen from '../screens/PreferenceScreen';
+import EditOrderScreen from '../screens/EditOrderScreen';
+import CartScreen from '../screens/CartScreen';
+import CheckoutScreen from '../screens/CheckoutScreen';
+import ReviewOrderScreen from '../screens/ReviewOrderScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 
@@ -75,7 +79,43 @@ export  function ClientStack({navigation,route}) {
                     })
                 }
             />   
-
+             <ClientSearch.Screen 
+                name ="CartScreen"
+                component ={CartScreen}
+                options = {
+                    ()=>({
+                        headerShown:false
+                    })
+                }
+            />
+             <ClientSearch.Screen 
+                name ="CheckoutScreen"
+                component ={CheckoutScreen}
+                options = {
+                    ()=>({
+                        headerShown:false
+                    })
+                }
+            />
+            <ClientSearch.Screen 
+                name ="EditOrderScreen"
+                component ={EditOrderScreen}
+                options = {
+                    ()=>({
+                        headerShown:false
+                    })
+                }
+            />
+            
+            <ClientSearch.Screen 
+            name ="ReviewOrderScreen"
+            component ={ReviewOrderScreen}
+            options = {
+                ()=>({
+                    headerShown:false
+                })
+            }
+        />
        </ClientSearch.Navigator>
     )
 }

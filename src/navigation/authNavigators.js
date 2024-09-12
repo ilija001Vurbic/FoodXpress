@@ -4,8 +4,6 @@ import SignInWelcomeScreen from "../screens/authScreens/SignInWelcomeScreen";
 import SignInScreen from "../screens/authScreens/SignInScreen";
 import RestaurantMapScreen from "../screens/RestaurantsMapScreen";
 import SignUpScreen from "../screens/authScreens/SignUpScreen";
-import HomeScreen from "../screens/HomeScreen";
-import RootClientTabs from "./ClientTabs";
 import DrawerNavigator from "./DrawerNavigator";
 
 const Auth = createStackNavigator();

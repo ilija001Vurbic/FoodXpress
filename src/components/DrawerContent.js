@@ -2,28 +2,68 @@ import React, {useState,useContext,useEffect} from 'react';
 import {View,Text,Linking,Pressable,Alert,Switch,StyleSheet,TouchableOpacity} from 'react-native';
 import {DrawerContentScrollView,DrawerItemList,DrawerItem} from '@react-navigation/drawer';
 import {Avatar,Button,Icon} from 'react-native-elements'
-import {colors} from '../global/styles'
+import { getAuth , signOut } from 'firebase/auth';
+import { colors } from '../global/styles';
+import { CommonActions } from '@react-navigation/native';
 
-export default function DrawerContent(props){
-    return(
-        <View style={styles.container}>
-            <DrawerContentScrollView {...props}>
-            <View style ={{backgroundColor:colors.buttons,}}>
-                <View style = {{flexDirection:'row', alignItems:'center',
-                                    paddingLeft:20,paddingVertical:10}}>
-                    <Avatar 
-                        rounded
-                        avatarStyle ={styles.avatar}
-                        size = {75}
-                        source = {{uri:"https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png"}}
-                    />
 
-                    <View style ={{marginLeft:10}}>
-                        <Text style ={{fontWeight:'bold',color:colors.cardBackground,fontSize:18 }} >Ilija Vurbić</Text>
-                        <Text style ={{color:colors.cardBackground,fontSize:14}} > ilija.vurbic2@gmail.com</Text>
-                    </View>
+export default function DrawerContent(props) {
+  const [user, setUser] = useState(null);
 
-                </View>
+  useEffect(() => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      setUser({
+        name: currentUser.displayName || "User",
+        email: currentUser.email,
+        photoURL: currentUser.photoURL || "https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png"
+      });
+    }
+    
+  }, []);
+  const [loading, setLoading] = useState(false);
+
+const handleLogout = () => {
+  setLoading(true);
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      setLoading(false);
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'SignInScreen' }],
+        })
+      );
+    })
+    .catch((error) => {
+      setLoading(false);
+      console.error("Error signing out: ", error);
+      Alert.alert("Logout Error", "Failed to logout. Please try again.");
+    });
+};
+  return (
+    <View style={styles.container}>
+      <DrawerContentScrollView {...props}>
+        <View style={{ backgroundColor: colors.buttons }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingVertical: 10 }}>
+            <Avatar
+              rounded
+              avatarStyle={styles.avatar}
+              size={75}
+              source={{ uri: user?.photoURL }}
+            />
+            <View style={{ marginLeft: 10 }}>
+              <Text style={{ fontWeight: 'bold', color: colors.cardBackground, fontSize: 18 }}>
+                {user?.name}
+              </Text>
+              <Text style={{ color: colors.cardBackground, fontSize: 14 }}>
+                {user?.email}
+              </Text>
+            </View>
+          </View>
 
                 <View style ={{flexDirection:'row',justifyContent:"space-evenly",paddingBottom:5}}>
 
@@ -111,18 +151,18 @@ export default function DrawerContent(props){
 
        </View> 
             </DrawerContentScrollView>
-            <DrawerItem 
-                    label = "Odjava"
-                    icon = {({color,size})=>(
-                        <Icon 
-                            type ="material-community"
-                            name = "logout-variant"
-                            color ={color}
-                            size ={size}
-                            onPress ={()=>{}} 
-                        />
-                    )}
+            <DrawerItem
+                label="Odjava"
+                icon={({ color, size }) => (
+                <Icon
+                type="material-community"
+                name="logout-variant"
+                color={color}
+                size={size}
                 />
+                )}
+            onPress={handleLogout}
+        />
         </View>
     )
 }

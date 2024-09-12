@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, ScrollView, Image, Platform, Alert } from 'reac
 import { colors } from '../global/styles';
 import { Icon, CheckBox } from 'react-native-elements';
 import { menuDetailedData } from '../global/Data';
-import { auth,database } from '../../firebase'; // Import Firebase configuration
+import { auth, database } from '../../firebase'; // Import Firebase configuration
 import { ref, push, set } from 'firebase/database';
 
 export default class PreferenceScreen extends Component {
@@ -19,20 +19,20 @@ export default class PreferenceScreen extends Component {
     };
   }
 
-  handleOrder = async () => {
+  handleAddToCart = async () => {
     const currentUser = auth.currentUser; // Get the current logged-in user
 
     if (currentUser) {
       const userId = currentUser.uid; // Retrieve user ID
-      const ordersRef = ref(database, `orders/${userId}`); // Reference to the user's orders path
+      const cartRef = ref(database, `cart/${userId}`); // Reference to the user's cart path
 
-      // Generate a new order ID
-      const newOrderRef = push(ordersRef); // This creates a new child node with a unique key
-      const orderId = newOrderRef.key;
+      // Generate a new cart item ID
+      const newCartItemRef = push(cartRef); // This creates a new child node with a unique key
+      const cartItemId = newCartItemRef.key;
 
       const { meal, price } = menuDetailedData[this.props.route.params.index];
-      const orderData = {
-        orderId,
+      const cartData = {
+        cartItemId,
         meal,
         selectedItems: this.state.selectedItems,
         quantity: this.state.quantity,
@@ -41,14 +41,14 @@ export default class PreferenceScreen extends Component {
       };
 
       try {
-        await set(newOrderRef, orderData); // Store the order data under the new order ID
-        Alert.alert('Success', 'Your order has been placed successfully!');
+        await set(newCartItemRef, cartData); // Store the cart item data under the new cart item ID
+        Alert.alert('Success', 'Item added to cart successfully!');
       } catch (error) {
-        console.error('Error storing order:', error);
-        Alert.alert('Error', 'Failed to place order. Please try again.');
+        console.error('Error adding item to cart:', error);
+        Alert.alert('Error', 'Failed to add item to cart. Please try again.');
       }
     } else {
-      Alert.alert('Error', 'You must be logged in to place an order.');
+      Alert.alert('Error', 'You must be logged in to add items to the cart.');
     }
   };
 
@@ -169,7 +169,7 @@ export default class PreferenceScreen extends Component {
         </View>
         <View style={styles.view17}>
           <View style={styles.view18}>
-            <Text style={styles.text10} onPress={this.handleOrder}>Add {this.state.quantity} to Cart R{(price * this.state.quantity).toFixed(2)}</Text>
+            <Text style={styles.text10} onPress={this.handleAddToCart}>Add {this.state.quantity} to Cart R{(price * this.state.quantity).toFixed(2)}</Text>
           </View>
         </View>
       </View>
