@@ -68,7 +68,7 @@ export default function CartScreen({ navigation }) {
     <View style={styles.cartItem}>
       <Text style={styles.itemText}>Meal: {item.meal}</Text>
       <Text style={styles.itemText}>Quantity: {item.quantity}</Text>
-      <Text style={styles.itemText}>Total: R{item.total.toFixed(2)}</Text>
+      <Text style={styles.itemText}>Total: €{item.total.toFixed(2)}</Text>
       <Button
         title="Remove"
         onPress={() => handleRemoveItem(item.id)}
@@ -86,7 +86,7 @@ export default function CartScreen({ navigation }) {
             keyExtractor={(item) => item.id}
             renderItem={renderCartItem}
           />
-          <Text style={styles.totalText}>Total: R{total.toFixed(2)}</Text>
+          <Text style={styles.totalText}>Total: €{total.toFixed(2)}</Text>
           <Button
             title="Proceed to Checkout"
             onPress={() => navigation.navigate('CheckoutScreen', { total })}

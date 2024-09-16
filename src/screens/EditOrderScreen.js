@@ -7,13 +7,16 @@ import { colors } from '../global/styles'; // Import colors from your global sty
 
 export default function EditOrderScreen({ route, navigation }) {
   const { orderId, currentOrder } = route.params;
-  const [quantity, setQuantity] = useState(currentOrder.quantity.toString()); // Store as string initially
-  const [total, setTotal] = useState(currentOrder.total); // Initial total based on current order
-  const [selectedItems, setSelectedItems] = useState(currentOrder.selectedItems || []); // Load selected items
+
+  // Extract the first item from the items array
+  const firstItem = currentOrder?.items[0] || {};
+  const [quantity, setQuantity] = useState(firstItem?.quantity?.toString() || '1');
+  const [total, setTotal] = useState(firstItem?.total || 0);
+  const [selectedItems, setSelectedItems] = useState(firstItem?.selectedItems || []);
 
   // Function to recalculate the total based on the quantity
   const calculateTotal = (quantity) => {
-    const pricePerItem = currentOrder.total / currentOrder.quantity;
+    const pricePerItem = firstItem?.total / (firstItem?.quantity || 1); // Avoid division by zero
     return pricePerItem * quantity;
   };
 
@@ -40,7 +43,17 @@ export default function EditOrderScreen({ route, navigation }) {
       }
 
       try {
-        await update(orderRef, { meal: currentOrder.meal, quantity: quantityNumber, total, selectedItems });
+        await update(orderRef, {
+          ...currentOrder,
+          items: [
+            {
+              ...firstItem,
+              quantity: quantityNumber,
+              total,
+              selectedItems,
+            },
+          ],
+        });
         Alert.alert('Success', 'Order updated successfully');
         navigation.goBack(); // Go back to the previous screen
       } catch (error) {
@@ -63,7 +76,7 @@ export default function EditOrderScreen({ route, navigation }) {
       <Text style={styles.label}>Meal</Text>
       <TextInput
         style={styles.input}
-        value={currentOrder.meal}
+        value={firstItem?.meal || ''}
         editable={false} // Make the meal field non-editable
       />
       <Text style={styles.label}>Quantity</Text>
@@ -74,7 +87,7 @@ export default function EditOrderScreen({ route, navigation }) {
         keyboardType="numeric"
       />
       <Text style={styles.label}>Selected Items</Text>
-      {currentOrder.selectedItems.map((item, index) => (
+      {firstItem?.selectedItems?.map((item, index) => (
         <CheckBox
           key={index}
           title={item}
@@ -85,7 +98,7 @@ export default function EditOrderScreen({ route, navigation }) {
           checkedColor={colors.buttons} // Consistent color for checked checkbox
         />
       ))}
-      <Text style={styles.totalLabel}>Total: R{total.toFixed(2)}</Text>
+      <Text style={styles.totalLabel}>Total: €{total.toFixed(2)}</Text>
       <Button title="Save Changes" onPress={handleSave} color={colors.buttons} />
     </View>
   );

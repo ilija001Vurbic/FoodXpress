@@ -1,10 +1,10 @@
-import React,{useState,useRef} from 'react';
-import { View, Text, StyleSheet, Dimensions,TextInput } from 'react-native';
-import {colors, parameters, title} from "../../global/styles"
-import { Button, Icon, SocialIcon } from 'react-native-elements';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, Alert } from 'react-native';
+import { colors, parameters, title } from "../../global/styles";
+import { Button, Icon } from 'react-native-elements';
 import Header from '../../components/header';
 import * as Animatable from "react-native-animatable";
-import { auth, database } from '../../../firebase';
+import { auth } from '../../../firebase';
 import { Formik } from 'formik';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -25,13 +25,13 @@ export default function SignInScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Header title="MOJ PROFIL" type="arrow-left" navigation={navigation} />
+            <Header title="MY PROFILE" type="arrow-left" navigation={navigation} />
             <View style={{ marginLeft: 20, marginTop: 10 }}>
-                <Text style={title}>Prijava</Text>
+                <Text style={title}>Sign In</Text>
             </View>
             <View style={{ alignItems: "center", marginTop: 10 }}>
-                <Text style={styles.text1}>Molimo unesite E-mail i lozinku</Text>
-                <Text style={styles.text1}>Vašeg profila</Text>
+                <Text style={styles.text1}>Please enter your email and password</Text>
+                <Text style={styles.text1}>for your profile</Text>
             </View>
             <Formik
                 initialValues={{ email: "", password: "" }}
@@ -57,7 +57,7 @@ export default function SignInScreen({ navigation }) {
                             </Animatable.View>
                             <TextInput
                                 style={{ width: "80%" }}
-                                placeholder="Lozinka"
+                                placeholder="Password"
                                 secureTextEntry
                                 onChangeText={handleChange('password')}
                                 value={values.password}
@@ -75,7 +75,7 @@ export default function SignInScreen({ navigation }) {
                         </View>
                         <View style={{ marginHorizontal: 20, marginTop: 30 }}>
                             <Button
-                                title="PRIJAVA"
+                                title="SIGN IN"
                                 buttonStyle={parameters.buttonStyle}
                                 titleStyle={parameters.buttonTitleStyle}
                                 onPress={handleSubmit}
@@ -88,54 +88,54 @@ export default function SignInScreen({ navigation }) {
         </View>
     );
 }
+
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
     },
-    text1:{
+    text1: {
         color: colors.grey3,
-        fontSize: 16
+        fontSize: 16,
     },
-
-    textInput1:{
-        borderWidth:1,
+    textInput1: {
+        borderWidth: 1,
         borderColor: "#86939e",
         marginHorizontal: 20,
         borderRadius: 12,
         marginBottom: 20,
-        paddingLeft:16
+        paddingLeft: 16,
     },
-    textInput2:{
-        borderWidth:1,
+    textInput2: {
+        borderWidth: 1,
         borderColor: "#86939e",
         marginHorizontal: 20,
         borderRadius: 12,
         flexDirection: "row",
         justifyContent: "space-between",
-        alignContent:"center",
+        alignContent: "center",
         alignItems: "center",
-        paddingLeft:16
+        paddingLeft: 16,
     },
-    SocialIcon:{
-        borderRadius:12,
-        height:50
+    SocialIcon: {
+        borderRadius: 12,
+        height: 50,
     },
-    createButton:{
+    createButton: {
         backgroundColor: "white",
-        alignContent:"center",
-        justifyContent:"center",
-        borderRadius:12,
-        borderWidth:1,
-        borderColor:"#ff8c52",
-        height:40,
-        paddingHorizontal:20
+        alignContent: "center",
+        justifyContent: "center",
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: "#ff8c52",
+        height: 40,
+        paddingHorizontal: 20,
     },
-    createButtonTitle:{
-        color:"#ff8c52",
+    createButtonTitle: {
+        color: "#ff8c52",
         fontSize: 16,
-        fontWeight:"bold",
-        alignItems:"center",
-        justifyContent:"center",
-        marginTop: -3
-    }
-})
+        fontWeight: "bold",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: -3,
+    },
+});

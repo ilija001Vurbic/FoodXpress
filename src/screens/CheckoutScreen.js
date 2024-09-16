@@ -20,6 +20,8 @@ export default function CheckoutScreen({ route, navigation }) {
         if (cartData) {
           const items = Object.entries(cartData).map(([key, value]) => ({ id: key, ...value }));
           setCartItems(items);
+          console.log('Order Data:', cartData);
+
         }
       });
 
@@ -46,6 +48,7 @@ export default function CheckoutScreen({ route, navigation }) {
         // Add order to 'orders' node in Firebase
         const newOrderRef = push(ordersRef); // Create a new order node
         await set(newOrderRef, orderData);   // Add order data to Firebase
+        console.log('Order Data:', orderData);
 
         // Clear the cart after adding order
         await remove(cartRef); // Clear the cart
@@ -62,7 +65,7 @@ export default function CheckoutScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Total Amount: R{total.toFixed(2)}</Text>
+      <Text style={styles.text}>Total Amount: €{total.toFixed(2)}</Text>
       <Button
         title="Confirm Purchase"
         onPress={handleCheckout}

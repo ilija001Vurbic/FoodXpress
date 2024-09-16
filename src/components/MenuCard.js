@@ -13,7 +13,7 @@ export default function MenuCard({productName,price,image,productDetails}){
                     <View>
                         <Text style ={styles.text2}>{productDetails}</Text>
                     </View>
-                    <Text style = {styles.text3}>ZAR {price}</Text>
+                    <Text style = {styles.text3}>€ {price}</Text>
                 </View>
                 <View style ={{flex:2}}>
                      <Image style ={styles.image} source ={{uri:image}} />

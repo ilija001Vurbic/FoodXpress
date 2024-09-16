@@ -5,13 +5,13 @@ import * as Location from 'expo-location';
 
 // Coordinates for Osijek, Croatia
 const restaurants = [
-  { name: 'McDonalds', latitude: 45.5511, longitude: 18.6920 }, // Osijek
-  { name: 'KFC', latitude: 45.5500, longitude: 18.6930 }, // Osijek
-  { name: 'Steers', latitude: 45.5520, longitude: 18.6940 }, // Osijek
-  { name: 'Roman Pizza', latitude: 45.5490, longitude: 18.6900 } // Osijek
+  { name: 'McDonalds', latitude: 45.5511, longitude: 18.6920, id: 1 },
+  { name: 'KFC', latitude: 45.5500, longitude: 18.6930, id: 2 },
+  { name: 'Steers', latitude: 45.5520, longitude: 18.6940, id: 3 },
+  { name: 'Roman Pizza', latitude: 45.5490, longitude: 18.6900, id: 4 }
 ];
 
-export default function RestaurantMapScreen() {
+export default function RestaurantMapScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -35,11 +35,16 @@ export default function RestaurantMapScreen() {
     requestLocationPermission();
   }, []);
 
+  // Function to handle marker press
+  const handleMarkerPress = (restaurant) => {
+    navigation.navigate('RestaurantDetailScreen', { restaurant });
+  };
+
   return (
     <View style={styles.container}>
       {location ? (
         <MapView
-          provider={PROVIDER_GOOGLE} // Use Google Maps
+          provider={PROVIDER_GOOGLE}
           style={styles.map}
           region={location}
           showsUserLocation={true}
@@ -49,11 +54,12 @@ export default function RestaurantMapScreen() {
             coordinate={location}
             title="You are here"
           />
-          {restaurants.map((restaurant, index) => (
+          {restaurants.map((restaurant) => (
             <Marker
-              key={index}
+              key={restaurant.id}
               coordinate={{ latitude: restaurant.latitude, longitude: restaurant.longitude }}
               title={restaurant.name}
+              onPress={() => handleMarkerPress(restaurant)} // Navigate on press
             />
           ))}
         </MapView>

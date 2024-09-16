@@ -1,25 +1,24 @@
-export const filterData = [{name:"Brza hrana",image: require('../assets/fastfood.png'), id:"0"},
-                    {name:"Burgeri",image:require("../assets/burger.png"),id:"1"},
-                    {name:"Salate",image:require("../assets/salads.png"),id:"2"},
-                    {name:"Hotdog",image:require("../assets/hotdog.png"),id:"3"},
-                    {name:"Kineska",image:require("../assets/chinese.png"),id:"4"},
-                    {name:"Meksička",image:require("../assets/mexican.png"),id:"5"},
-                    {name:"Morski plodovi",image:require("../assets/seafood.png"),id:"6"},
-                ];
+export const filterData = [
+  { name: "Fast Food", image: require('../assets/fastfood.png'), id: "0" },
+  { name: "Burgers", image: require("../assets/burger.png"), id: "1" },
+  { name: "Salads", image: require("../assets/salads.png"), id: "2" },
+  { name: "Hot Dogs", image: require("../assets/hotdog.png"), id: "3" },
+  { name: "Chinese", image: require("../assets/chinese.png"), id: "4" },
+  { name: "Mexican", image: require("../assets/mexican.png"), id: "5" },
+  { name: "Seafood", image: require("../assets/seafood.png"), id: "6" },
+];
 
-
-
-
-export const filterData2 = [{name:"Brza hrana",image:'https://bukasapics.s3.us-east-2.amazonaws.com/chicken.png' , id:"0"},
-{name:"Burgeri",image: 'https://bukasapics.s3.us-east-2.amazonaws.com/macdo.png',id:"1"},
-{name:"Salate",image:"https://bukasapics.s3.us-east-2.amazonaws.com/nandos.png",id:"2"},
-{name:"Hotdog",image: "https://bukasapics.s3.us-east-2.amazonaws.com/pizza.png",id:"3"},
-{name:"Kineska",image:"https://bukasapics.s3.us-east-2.amazonaws.com/pizza6.png",id:"4"},
-{name:"Meksička",image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate1.png",id:"5"},  
-{name:"Morski plodovi",image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate2.png",id:"6"},
-{name:"Kineska hrana",image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate3.png",id:"7"},
-{name:"Meksička pita",image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate4.png",id:"8"},  
-{name:"Ocean",image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png",id:"9"},
+export const filterData2 = [
+  { name: "Fast Food", image: 'https://via.placeholder.com/100?text=Fast+Food', id: "0" },
+  { name: "Burgers", image: 'https://via.placeholder.com/100?text=Burgers', id: "1" },
+  { name: "Salads", image: 'https://via.placeholder.com/100?text=Salads', id: "2" },
+  { name: "Hot Dogs", image: 'https://via.placeholder.com/100?text=Hot+Dogs', id: "3" },
+  { name: "Chinese Food", image: 'https://via.placeholder.com/100?text=Chinese+Food', id: "4" },
+  { name: "Mexican", image: 'https://via.placeholder.com/100?text=Mexican', id: "5" },
+  { name: "Seafood", image: 'https://via.placeholder.com/100?text=Seafood', id: "6" },
+  { name: "Chinese Cuisine", image: 'https://via.placeholder.com/100?text=Chinese+Cuisine', id: "7" },
+  { name: "Mexican Pie", image: 'https://via.placeholder.com/100?text=Mexican+Pie', id: "8" },
+  { name: "Ocean", image: 'https://via.placeholder.com/100?text=Ocean', id: "9" },
 ];
 
 
@@ -28,17 +27,17 @@ export const filterData2 = [{name:"Brza hrana",image:'https://bukasapics.s3.us-e
 
  export const restaurantsData = [
                   {restaurantName:"Mc Donalds", farAway:"21.2",
-                  businessAddress:"22 Bessie street, Cape Town",images:'https://bukasapics.s3.us-east-2.amazonaws.com/chicken.png',
+                  businessAddress:"Drinska 10, Osijek", images: require('../assets/mcdonalds.png'),
                   averageReview:4.9,numberOfReview:272,coordinates : {lat: -26.1888612, lng: 28.246325} ,discount:10,deliveryTime:15,
-                  collectTime:5, foodType:"Burgers, Wraps,Milkshakes..." ,
+                  collectTime:5, foodType:"Burgers, Wraps, Milkshakes..." ,
                   productData:[{name:"Hand cut chips", price:29.30,image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png"},
                   {name:"Big Mac", price:50.80,image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate4.png"},{name:"Chicken Burger",
                    price:70,image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate3.png"},
                     ],
                   id:0},
                   
-                  {restaurantName:"KFC", farAway:"12.7",businessAddress:"22 Bessie street, Cape Town",
-                  images:'https://bukasapics.s3.us-east-2.amazonaws.com/macdo.png',
+                  {restaurantName:"KFC", farAway:"12.7",businessAddress:"Sjenjak 35, Osijek",
+                  images:require('../assets/kfc.jpg'),
                   averageReview:4.3, numberOfReview:306, coordinates : {lat: -26.1891648, lng: 28.2441808},
                   discount:20,deliveryTime:30,collectTime:10, foodType:"Chicken,Chicken wings... ",
                   productData:[{name:"Hand cut chips", price:29.30,image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png"},
@@ -47,8 +46,8 @@ export const filterData2 = [{name:"Brza hrana",image:'https://bukasapics.s3.us-e
                       ],
                   id:1},
                   
-                  {restaurantName:"Steers", farAway:"5",businessAddress:" 17 Olivia Rd, Johannesburg",
-                  images:'https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png',
+                  {restaurantName:"Steers", farAway:"5",businessAddress:"Strossmayerova 1, Osijek",
+                  images:require('../assets/steers.jpg'),
                    coordinates :{ lat: -26.1886781, lng: 28.244879}, averageReview: 4.9,numberOfReview: 1272,
                     discount:12, deliveryTime:25,collectTime:15,foodType:"Flame grilled beef Burgers",
                    productData:[{name:"Hand cut chips", price:29.30,image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png"},
@@ -57,8 +56,8 @@ export const filterData2 = [{name:"Brza hrana",image:'https://bukasapics.s3.us-e
                       ],
                    id:2},
                   
-                  {restaurantName:"Roman Pizza", farAway:"7",businessAddress:" 15 Atlas Rd, Kempton Park",
-                  images:'https://bukasapics.s3.us-east-2.amazonaws.com/pizza6.png',
+                  {restaurantName:"Roman Pizza", farAway:"7",businessAddress:"Gacka 2, Osijek",
+                  images:require('../assets/romanpizza.jpg'),
                   averageReview:4.3, numberOfReview:700, coordinates: {lat: -26.1845336, lng: 28.2481691},
                   discount:null,deliveryTime:20,collectTime:10,foodType:"Chicken pizza, Vegetarian pizza...",
                   productData:[{name:"Hand cut chips", price:29.30,image:"https://bukasapics.s3.us-east-2.amazonaws.com/plate5.png"},

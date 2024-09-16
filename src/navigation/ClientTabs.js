@@ -29,7 +29,7 @@ export default function RootClientTabs(){
                 options ={
                     {
                         headerShown:false,
-                        tabBarLabel : "Početna",
+                        tabBarLabel : "Home",
                         tabBarIcon: ({color,size})=>(
                             <Icon 
                                 name ='home'
@@ -50,7 +50,7 @@ export default function RootClientTabs(){
                 options ={
                     {
                         headerShown:false,
-                        tabBarLabel : "Pretraži",
+                        tabBarLabel : "Search",
                         tabBarIcon: ({color,size})=>(
                             <Icon 
                                 name ='search'
@@ -72,7 +72,7 @@ export default function RootClientTabs(){
                 options ={
                     {
                         headerShown:false,
-                        tabBarLabel : "Moje narudžbe",
+                        tabBarLabel : "My orders",
                         tabBarIcon: ({color,size})=>(
                             <Icon 
                                 name ='view-list'
@@ -93,7 +93,7 @@ export default function RootClientTabs(){
                 options ={
                     {
                         headerShown:false,
-                        tabBarLabel : "Moj profil",
+                        tabBarLabel : "My profile",
                         tabBarIcon: ({color,size})=>(
                             <Icon 
                                 name ='person'

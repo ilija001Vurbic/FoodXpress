@@ -134,7 +134,7 @@ export default class PreferenceScreen extends Component {
                           />
                           <Text style={{ color: colors.grey2, marginLeft: -10 }}>{items.name}</Text>
                         </View>
-                        <Text style={styles.text6}>R{items.price.toFixed(2)}</Text>
+                        <Text style={styles.text6}>€{items.price.toFixed(2)}</Text>
                       </View>
                     </View>
                   )}
@@ -169,7 +169,7 @@ export default class PreferenceScreen extends Component {
         </View>
         <View style={styles.view17}>
           <View style={styles.view18}>
-            <Text style={styles.text10} onPress={this.handleAddToCart}>Add {this.state.quantity} to Cart R{(price * this.state.quantity).toFixed(2)}</Text>
+            <Text style={styles.text10} onPress={this.handleAddToCart}>Add {this.state.quantity} to Cart €{(price * this.state.quantity).toFixed(2)}</Text>
           </View>
         </View>
       </View>
