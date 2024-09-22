@@ -8,8 +8,8 @@ import HomeScreen from "../screens/HomeScreen";
 import MyOrdersScreen from "../screens/MyOrdersScreen";
 import MyAccountScreen from "../screens/MyAccountScreen"
 import { ClientStack } from './clientStack';
-import EditOrderScreen from '../screens/EditOrderScreen';
-import ReviewOrderScreen from '../screens/ReviewOrderScreen';
+import RestaurantHomeScreen from '../screens/RestaurantHomeScreen';  // Import it here
+
 
 const ClientTabs = createBottomTabNavigator();
 
@@ -63,8 +63,6 @@ export default function RootClientTabs(){
                 }
 
             />
-
-
 
         <ClientTabs.Screen 
                 name ="MyOrdersScreen"

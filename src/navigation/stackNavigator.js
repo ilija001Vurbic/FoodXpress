@@ -4,6 +4,8 @@ import EditOrderScreen from '../screens/EditOrderScreen';
 import CartScreen from '../screens/CartScreen';
 import CheckoutScreen from '../screens/CheckoutScreen';
 import HomeHeader from '../components/HomeHeader'; // Import HomeHeader
+import HomeScreen from '../screens/HomeScreen';
+import RestaurantHomeScreen from '../screens/RestaurantHomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +20,8 @@ export default function AppNavigator() {
       <Stack.Screen name="EditOrderScreen" component={EditOrderScreen} />
       <Stack.Screen name="CartScreen" component={CartScreen} />
       <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
+      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="RestaurantHomeScreen" component={RestaurantHomeScreen} /> 
     </Stack.Navigator>
   );
 }

@@ -27,6 +27,7 @@ export default function MyOrdersScreen() {
 
       const unsubscribe = onValue(ordersRef, (snapshot) => {
         const ordersData = snapshot.val();
+        console.log('Orders Data:', ordersData);
         if (ordersData) {
           const formattedOrders = Object.entries(ordersData).map(([key, value]) => ({ id: key, ...value }));
           setOrders(formattedOrders);
@@ -35,6 +36,8 @@ export default function MyOrdersScreen() {
         }
         setLoading(false);
       });
+
+
 
       return () => unsubscribe();
     } else {
@@ -73,44 +76,52 @@ export default function MyOrdersScreen() {
     }
   };
 
-  const renderOrderItem = ({ item }) => (
-    <View style={styles.orderItem}>
-      <Text style={styles.orderText}>Meal: {item.meal}</Text>
-      <Text style={styles.orderText}>Quantity: {item.quantity}</Text>
-      <Text style={styles.orderText}>Total: R{item.total}</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          title="Edit"
-          onPress={() => 
-            navigation.navigate('EditOrderScreen', { orderId: item.id, currentOrder: item })}
-          color={colors.buttons}
-        />
-        <Button
-          title="Cancel"
-          onPress={() => handleCancelOrder(item.id)}
-          color={colors.buttons}
-        />
-        <Button
-          title="Review"
-          onPress={() =>
-            navigation.navigate('SearchScreen', {
-              screen: 'ReviewOrderScreen',
-              params: { orderId: item.id }
-            })}
-          color={colors.buttons}
-        />
-      </View>
-    </View>
-  );
-
-  if (loading) {
+  const renderOrderItem = ({ item }) => {
+    console.log('Items:', item.items); // Log items for debugging
+  
     return (
-      <View style={styles.container}>
-        <Text>Loading orders...</Text>
+      <View style={styles.orderItem}>
+        <Text style={styles.orderText}>Total: €{item.total || "N/A"}</Text>
+        
+        {Array.isArray(item.items) && item.items.length > 0 ? (
+          item.items.map((mealItem, index) => (
+            <View key={index}>
+              <Text style={styles.orderText}>Meal: {mealItem.meal || "N/A"}</Text>
+              <Text style={styles.orderText}>Quantity: {mealItem.quantity || "N/A"}</Text>
+              {mealItem.selectedItems && mealItem.selectedItems.length > 0 && (
+                <Text style={styles.orderText}>Selected Items: {mealItem.selectedItems.join(", ")}</Text>
+              )}
+            </View>
+          ))
+        ) : (
+          <Text style={styles.orderText}>No items found</Text>
+        )}
+  
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Edit"
+            onPress={() => 
+              navigation.navigate('EditOrderScreen', { orderId: item.orderId, currentOrder: item })}
+            color={colors.buttons}
+          />
+          <Button
+            title="Cancel"
+            onPress={() => handleCancelOrder(item.orderId)}
+            color={colors.buttons}
+          />
+          <Button
+            title="Review"
+            onPress={() =>
+              navigation.navigate('SearchScreen', {
+                screen: 'ReviewOrderScreen',
+                params: { orderId: item.orderId }
+              })}
+            color={colors.buttons}
+          />
+        </View>
       </View>
     );
-  }
-
+  };
   return (
     <View style={styles.container}>
       {orders.length > 0 ? (

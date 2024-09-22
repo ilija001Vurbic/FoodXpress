@@ -109,6 +109,10 @@ export default function HomeScreen({ navigation }) {
             renderItem={({ item }) => (
               <View style={{ marginRight: 5 }}>
                 <FoodCard
+                  OnPressFoodCard={() => {
+                    console.log('Navigating to RestaurantHomeScreen with ID:', item.id);
+                    navigation.navigate('RestaurantHomeScreen', { id: item.id });
+                  }}
                   screenWidth={SCREEN_WIDTH * 0.8}
                   images={item.images}
                   restaurantName={item.restaurantName}
@@ -134,6 +138,7 @@ export default function HomeScreen({ navigation }) {
             renderItem={({ item }) => (
               <View style={{ marginRight: 5 }}>
                 <FoodCard
+                  OnPressFoodCard={() => navigation.navigate('RestaurantHomeScreen', { id: item.id })}
                   screenWidth={SCREEN_WIDTH * 0.8}
                   images={item.images}
                   restaurantName={item.restaurantName}
@@ -154,6 +159,7 @@ export default function HomeScreen({ navigation }) {
             restaurantsData.map(item => (
               <View key={item.id} style={{ paddingBottom: 20 }}>
                 <FoodCard
+                  OnPressFoodCard={() => navigation.navigate('RestaurantHomeScreen', { id: item.id })}
                   screenWidth={SCREEN_WIDTH * 0.95}
                   images={item.images}
                   restaurantName={item.restaurantName}
