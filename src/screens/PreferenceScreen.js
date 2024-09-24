@@ -2,46 +2,75 @@ import React, { Component } from 'react';
 import { Text, StyleSheet, View, ScrollView, Image, Platform, Alert } from 'react-native';
 import { colors } from '../global/styles';
 import { Icon, CheckBox } from 'react-native-elements';
-import { menuDetailedData } from '../global/Data';
-import { auth, database } from '../../firebase'; // Import Firebase configuration
-import { ref, push, set } from 'firebase/database';
+import { auth, database } from '../../firebase';
+import { ref, onValue, push, set } from 'firebase/database';
 
 export default class PreferenceScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      preference: menuDetailedData[this.props.route.params.index].preferenceData,
-      required: menuDetailedData[this.props.route.params.index].required,
-      minimum_quantity: menuDetailedData[this.props.route.params.index].minimum_quatity,
+      preference: [], 
+      preferenceTitle: [], 
+      required: [],
+      minimum_quantity: [],
       selectedItems: [],
-      quantity: 1, // Initialize quantity
+      quantity: 1,
+      meal: '',
+      details: '',
+      price: 0,
     };
   }
 
+  componentDidMount() {
+    this.fetchMenuData();
+  }
+
+  fetchMenuData = () => {
+    const index = this.props.route.params.index;
+    const menuRef = ref(database, `menuDetails/${index}`);
+
+    onValue(menuRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        this.setState({
+          meal: data.meal || '',
+          details: data.details || '',
+          price: data.price || 0,
+          preference: data.preferenceData || [], 
+          preferenceTitle: data.preferenceTitle || [],
+          required: data.required || [],
+          minimum_quantity: data.minimum_quantity || [], 
+        });
+      } else {
+        console.log('No data available for the specified menu item');
+      }
+    }, (error) => {
+      console.error('Error fetching menu data:', error);
+    });
+  };
+
   handleAddToCart = async () => {
-    const currentUser = auth.currentUser; // Get the current logged-in user
+    const currentUser = auth.currentUser;
 
     if (currentUser) {
-      const userId = currentUser.uid; // Retrieve user ID
-      const cartRef = ref(database, `cart/${userId}`); // Reference to the user's cart path
-
-      // Generate a new cart item ID
-      const newCartItemRef = push(cartRef); // This creates a new child node with a unique key
+      const userId = currentUser.uid;
+      const cartRef = ref(database, `cart/${userId}`);
+      const newCartItemRef = push(cartRef);
       const cartItemId = newCartItemRef.key;
 
-      const { meal, price } = menuDetailedData[this.props.route.params.index];
+      const { meal, price, selectedItems, quantity } = this.state;
       const cartData = {
         cartItemId,
         meal,
-        selectedItems: this.state.selectedItems,
-        quantity: this.state.quantity,
-        total: price * this.state.quantity,
+        selectedItems,
+        quantity,
+        total: price * quantity,
         timestamp: new Date().toISOString(),
       };
 
       try {
-        await set(newCartItemRef, cartData); // Store the cart item data under the new cart item ID
+        await set(newCartItemRef, cartData);
         Alert.alert('Success', 'Item added to cart successfully!');
       } catch (error) {
         console.error('Error adding item to cart:', error);
@@ -53,8 +82,7 @@ export default class PreferenceScreen extends Component {
   };
 
   render() {
-    const index = this.props.route.params.index;
-    const { meal, details, price } = menuDetailedData[index];
+    const { meal, details, price, preference, preferenceTitle, required, minimum_quantity, selectedItems, quantity } = this.state;
 
     return (
       <View style={styles.container}>
@@ -81,63 +109,41 @@ export default class PreferenceScreen extends Component {
             <Text style={styles.text1}>{meal}</Text>
             <Text style={styles.text2}>{details}</Text>
           </View>
-          <View style={styles.view2}>
-            <Text style={styles.text3}>Choose a meal type</Text>
-            <View style={styles.view3}>
-              <Text style={styles.text4}>REQUIRED</Text>
-            </View>
-          </View>
           <View style={styles.view4}>
-            <View style={styles.view5}>
-              <View style={styles.view6}>
-                <CheckBox
-                  center
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  checked={true}
-                  checkedColor={colors.buttons}
-                />
-                <Text style={styles.text5}>- - - - -</Text>
-              </View>
-              <Text style={styles.text6}>R{price.toFixed(2)}</Text>
-            </View>
-          </View>
-          {/* Render preferences */}
-          <View>
-            {this.state.preference.map(item => (
-              <View key={item.id}>
+            {preference.map((pref, index) => (
+              <View key={index}>
                 <View style={styles.view7}>
-                  <Text style={styles.text8}>{menuDetailedData[index].preferenceTitle[this.state.preference.indexOf(item)]}</Text>
-                  {this.state.required[this.state.preference.indexOf(item)] &&
+                  <Text style={styles.text8}>{preferenceTitle[index]}</Text>
+                  {required[index] && (
                     <View style={styles.view9}>
-                      <Text style={styles.text7}>{this.state.minimum_quantity[this.state.preference.indexOf(item)]} REQUIRED</Text>
+                      <Text style={styles.text7}>{minimum_quantity[index]} REQUIRED</Text>
                     </View>
-                  }
+                  )}
                 </View>
                 <View style={styles.view10}>
-                  {item.map(items =>
-                    <View style={styles.view4} key={items.id}>
+                  {pref.map((subItem, subIndex) => (
+                    <View style={styles.view4} key={subIndex}>
                       <View style={styles.view19}>
                         <View style={styles.view6}>
                           <CheckBox
                             center
                             checkedIcon="check-square-o"
                             uncheckedIcon="square-o"
-                            checked={this.state.selectedItems.includes(items.name)}
+                            checked={selectedItems.includes(subItem.name)}
                             checkedColor={colors.buttons}
                             onPress={() => {
-                              const selectedItems = this.state.selectedItems.includes(items.name)
-                                ? this.state.selectedItems.filter(name => name !== items.name)
-                                : [...this.state.selectedItems, items.name];
-                              this.setState({ selectedItems });
+                              const updatedSelectedItems = selectedItems.includes(subItem.name)
+                                ? selectedItems.filter(name => name !== subItem.name)
+                                : [...selectedItems, subItem.name];
+                              this.setState({ selectedItems: updatedSelectedItems });
                             }}
                           />
-                          <Text style={{ color: colors.grey2, marginLeft: -10 }}>{items.name}</Text>
+                          <Text style={{ color: colors.grey2, marginLeft: -10 }}>{subItem.name}</Text>
                         </View>
-                        <Text style={styles.text6}>€{items.price.toFixed(2)}</Text>
+                        <Text style={styles.text6}>€{subItem.price.toFixed(2)}</Text>
                       </View>
                     </View>
-                  )}
+                  ))}
                 </View>
               </View>
             ))}
@@ -153,23 +159,25 @@ export default class PreferenceScreen extends Component {
               type="material"
               color={colors.black}
               size={25}
-              onPress={() => this.setState({ quantity: Math.max(1, this.state.quantity - 1) })}
+              onPress={() => this.setState({ quantity: Math.max(1, quantity - 1) })}
             />
           </View>
-          <Text style={styles.text9}>{this.state.quantity}</Text>
+          <Text style={styles.text9}>{quantity}</Text>
           <View style={styles.view16}>
             <Icon
               name="add"
               type="material"
               color={colors.black}
               size={25}
-              onPress={() => this.setState({ quantity: this.state.quantity + 1 })}
+              onPress={() => this.setState({ quantity: quantity + 1 })}
             />
           </View>
         </View>
         <View style={styles.view17}>
           <View style={styles.view18}>
-            <Text style={styles.text10} onPress={this.handleAddToCart}>Add {this.state.quantity} to Cart €{(price * this.state.quantity).toFixed(2)}</Text>
+            <Text style={styles.text10} onPress={this.handleAddToCart}>
+              Add {quantity} to Cart €{(price * quantity).toFixed(2)}
+            </Text>
           </View>
         </View>
       </View>

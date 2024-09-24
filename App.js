@@ -2,9 +2,22 @@ import React from "react";
 import { View, Text, StyleSheet, StatusBar } from "react-native";
 import { colors } from "./src/global/styles";
 import RootNavigator from "./src/navigation/RootNavigator";
-import AppNavigator from "./src/navigation/stackNavigator";
+import { useEffect } from "react";
+import uploadDataToFirebase from "./src/global/uploadDataToFirebase"
 
 export default function App() {
+  /*useEffect(() => {
+    const uploadData = async () => {
+      try {
+        await uploadDataToFirebase();
+        console.log('Data uploaded successfully!');
+      } catch (error) {
+        console.error('Error uploading data:', error);
+      }
+    };
+
+    uploadData();
+  }, []);*/
   return (
     <View style={styles.container}>
       <StatusBar

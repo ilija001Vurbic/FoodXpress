@@ -1,28 +1,41 @@
-import React ,{useState}from 'react'
-import { StyleSheet, Text, View,Dimensions} from 'react-native'
-import { Route1,Route2,Route3,Route4,Route5,Route6,Route7,Route8 } from './MenuTabs';
-import { restaurantsData,menu } from '../global/Data';
-const SCREEN_WIDTH = Dimensions.get('window').width
-import { TabView,TabBar } from 'react-native-tab-view';
-import {colors} from '../global/styles'
-import { Icon} from 'react-native-elements';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Route1, Route2, Route3, Route4, Route5, Route6, Route7, Route8 } from './MenuTabs';
+import { database } from '../../firebase'; // Import your Firebase config
+import { ref, onValue } from 'firebase/database'; // Import Firebase database functions
+import { TabView, TabBar } from 'react-native-tab-view';
+import { colors } from '../global/styles';
+import { Icon } from 'react-native-elements';
 
-const MenuProductScreen = ({navigation,route}) => {
-    const [routes] = useState(menu)
-    const [index,setIndex] = useState(0)
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
+const MenuProductScreen = ({ navigation, route }) => {
+    const [routes, setRoutes] = useState([]);
+    const [index, setIndex] = useState(0);
 
-    const renderTabBar = props =>(
+    // Fetching menu data from Firebase
+    useEffect(() => {
+        const menuRef = ref(database, 'menu'); // Adjust the path as necessary
+        onValue(menuRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                // Assuming data is an array or you can transform it to the desired format
+                setRoutes(data);
+            }
+        });
+    }, []);
+
+    const renderTabBar = (props) => (
         <TabBar 
             {...props}
-            indicatorStyle = {{backgroundColor:colors.cardbackground}}
-            tabStyle = {styles.tabStyle}
-            scrollEnabled = {true}
-            style ={styles.tab}
-            labelStyle = {styles.tabLabel}
-            contentContainerStyle = {styles.tabContainer}
+            indicatorStyle={{ backgroundColor: colors.cardbackground }}
+            tabStyle={styles.tabStyle}
+            scrollEnabled={true}
+            style={styles.tab}
+            labelStyle={styles.tabLabel}
+            contentContainerStyle={styles.tabContainer}
         />
-    )
+    );
 
     const renderScene = ({route})=>{
 
@@ -52,84 +65,70 @@ const MenuProductScreen = ({navigation,route}) => {
 
 
     return (
-        <View style ={styles.container}>
-            <View style ={styles.view1}>
+        <View style={styles.container}>
+            <View style={styles.view1}>
                 <Icon 
-                    name ="arrow-left"
-                    type = "material-community"
-                    color = {colors.black}
-                    size = {25}
-                    onPress ={()=>navigation.goBack()}
+                    name="arrow-left"
+                    type="material-community"
+                    color={colors.black}
+                    size={25}
+                    onPress={() => navigation.goBack()}
                 />
-                <Text style ={styles.text1}>Menu</Text>
+                <Text style={styles.text1}>Menu</Text>
             </View>
         
             <TabView 
-                navigationState ={{index,routes}}
-                renderScene = {renderScene}
-                onIndexChange = {setIndex}
-                initialLayout = {SCREEN_WIDTH}
-                renderTabBar = {renderTabBar}
-                tabBarPosition = 'top'
-                navigation ={navigation}
-                route = {route}
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: SCREEN_WIDTH }}
+                renderTabBar={renderTabBar}
+                tabBarPosition='top'
             />
-    </View>
-       
-    )
-}
+        </View>
+    );
+};
 
-export default MenuProductScreen
+export default MenuProductScreen;
 
 const styles = StyleSheet.create({
-    scene: {
+    container: {
         flex: 1,
-      },
-    
-      container:{flex:1,
-                 top:0,
-                 left:0,
-                 right:0
-         },
-    
-    view1:{flexDirection:"row",
-    alignItems:"center",
-    padding:10,
-    backgroundColor:colors.buttons,
-    top:0,
-    left:0,
-    right:0,
-    paddingTop:25
+        top: 0,
+        left: 0,
+        right: 0,
     },
-    
-    text1:{fontWeight:"bold",
-          marginLeft:40,
-          color:colors.black,
-          fontSize:18
-        },
-    
-    view2:{marginTop:5,
-          paddingBottom:20
-        },
-    
-    tab:{ paddingTop :0,
-          backgroundColor:colors.buttons,
-          justifyContent:"space-between",
-         // alignItems:"center"
-          },
-    
-    tabContainer:{ alignItems:'center',
-          alignContent:'center',
-          justifyContent:'center',
-          },
-    
-    tabLabel:{fontWeight:'bold',
-          color: colors.cardbackground
-          },
-      
-    tabStyle:{width:SCREEN_WIDTH/4,
-              maxHeight:45,
-            },
-    scene2: { backgroundColor: '#673ab7' } 
-
-})
+    view1: {
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        backgroundColor: colors.buttons,
+        top: 0,
+        left: 0,
+        right: 0,
+        paddingTop: 25,
+    },
+    text1: {
+        fontWeight: "bold",
+        marginLeft: 40,
+        color: colors.black,
+        fontSize: 18,
+    },
+    tab: {
+        paddingTop: 0,
+        backgroundColor: colors.buttons,
+        justifyContent: "space-between",
+    },
+    tabContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    tabLabel: {
+        fontWeight: 'bold',
+        color: colors.cardbackground,
+    },
+    tabStyle: {
+        width: SCREEN_WIDTH / 4,
+        maxHeight: 45,
+    },
+});
